@@ -1,0 +1,7 @@
+﻿services:
+  orbittracker:
+    image: orbittracker
+    build:
+      context: .
+      dockerfile: OrbitTracker/Dockerfile
+
