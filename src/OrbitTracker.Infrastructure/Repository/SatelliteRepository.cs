@@ -1,22 +1,31 @@
-﻿using OrbitTracker.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using OrbitTracker.Core.Contracts;
 using OrbitTracker.Core.Models;
+using OrbitTracker.Infrastructure.Data;
 
 namespace OrbitTracker.Infrastructure.Repository;
 
 public class SatelliteRepository : ISatelliteRepository
 {
-    private readonly List<SatellitePosition> _positions = new();
+    private readonly OrbitTrackerDbContext _dbContext;
     
-    public Task SavePositionAsync(SatellitePosition position)
+    public SatelliteRepository(OrbitTrackerDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+    
+    public async Task SavePositionAsync(SatellitePosition position)
     {
         position.Id = Guid.NewGuid();
-        _positions.Add(position);
-        return Task.CompletedTask;
+        _dbContext.SatellitePositions.Add(position);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<SatellitePosition?> GetLAstPositionAsync(CancellationToken cancellationToken)
+    public async Task<SatellitePosition?> GetLAstPositionAsync(CancellationToken cancellationToken)
     {
-        var lastPosition = _positions.LastOrDefault();
-        return Task.FromResult(lastPosition);
+        var lastPosition = await _dbContext.SatellitePositions
+            .OrderByDescending(p => p.TimeStamp)
+            .FirstOrDefaultAsync(cancellationToken);
+        return lastPosition;
     }
 }
