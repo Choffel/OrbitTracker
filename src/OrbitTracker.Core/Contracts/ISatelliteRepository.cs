@@ -4,5 +4,7 @@ namespace OrbitTracker.Core.Contracts;
 
 public interface ISatelliteRepository
 {
-    Task AddAsync(SatellitePosition position);
+    Task SavePositionAsync(SatellitePosition position);
+    
+    Task<SatellitePosition?> GetLAstPositionAsync(CancellationToken cancellationToken);
 }
