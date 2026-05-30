@@ -9,6 +9,9 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +23,10 @@
     <ItemGroup>
       <ProjectReference Include="..\OrbitTracker.Core\OrbitTracker.Core.csproj" />
       <ProjectReference Include="..\OrbitTracker.Infrastructure\OrbitTracker.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Dtos\" />
     </ItemGroup>
 
 </Project>
