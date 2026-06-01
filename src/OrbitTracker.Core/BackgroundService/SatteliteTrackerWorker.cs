@@ -20,7 +20,7 @@ public class SatteliteTrackerWorker : Microsoft.Extensions.Hosting.BackgroundSer
             try
             {
                 var currentPosition = await _trackerService.TrackSatelliteAsync(stoppingToken);
-                await _satelliteRepository.SavePositionAsync(currentPosition);
+                await _satelliteRepository.SavePositionAsync(currentPosition, stoppingToken);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
