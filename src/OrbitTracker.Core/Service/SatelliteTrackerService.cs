@@ -22,7 +22,7 @@ public class SatelliteTrackerService : ISatelliteTrackingService
     
         return new SatellitePosition
         {
-            Latitude = response.Latitude,
+            Latitude = response.Latitude,   
             Longitude = response.Longitude,
             TimeStamp = DateTimeOffset.FromUnixTimeSeconds(response.Timestamp).DateTime
         };

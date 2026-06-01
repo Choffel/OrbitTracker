@@ -14,7 +14,7 @@ public class SatelliteRepository : ISatelliteRepository
         _dbContext = dbContext;
     }
     
-    public async Task SavePositionAsync(SatellitePosition position)
+    public async Task SavePositionAsync(SatellitePosition position, CancellationToken cancellationToken)
     {
         position.Id = Guid.NewGuid();
         _dbContext.SatellitePositions.Add(position);
