@@ -12,7 +12,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<OrbitTrackerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddHostedService<SatelliteTrackerService>();
+builder.Services.AddHostedService<SatteliteTrackerWorker>();
+
 builder.Services.AddScoped<ISatelliteTrackingService, SatelliteTrackerService>();
 builder.Services.AddScoped<ISatelliteRepository, SatelliteRepository>();
 
