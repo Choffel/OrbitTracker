@@ -7,13 +7,17 @@ namespace OrbitTracker.Core.Service;
 
 public class SatelliteTrackerService : ISatelliteTrackingService
 {
-    private string url = "http://api.open-notify.org/iss-now.json";
-    private readonly HttpClient client;
+    private string url = "iss-now.json";
+    private readonly HttpClient _client;
     
+    public SatelliteTrackerService(HttpClient client)
+    {
+        _client = client;
+    }
     
     public async Task<SatellitePosition> TrackSatelliteAsync(CancellationToken cancellationToken)
     {
-        var response = await client.GetFromJsonAsync<IssResponse>(url, cancellationToken);
+        var response = await _client.GetFromJsonAsync<IssResponse>(url, cancellationToken);
 
         if (response == null)
         {
@@ -22,9 +26,10 @@ public class SatelliteTrackerService : ISatelliteTrackingService
     
         return new SatellitePosition
         {
+            Id = Guid.NewGuid(),
             Latitude = response.Latitude,   
             Longitude = response.Longitude,
-            TimeStamp = DateTimeOffset.FromUnixTimeSeconds(response.Timestamp).DateTime
+            TimeStamp = DateTimeOffset.FromUnixTimeSeconds(response.Timestamp).UtcDateTime
         };
     }
 }

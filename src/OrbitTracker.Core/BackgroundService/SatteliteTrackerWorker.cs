@@ -1,37 +1,50 @@
-﻿using OrbitTracker.Core.Contracts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OrbitTracker.Core.Contracts;
 
 namespace OrbitTracker.Core.BackgroundService;
 
 public class SatteliteTrackerWorker : Microsoft.Extensions.Hosting.BackgroundService
 {
-    private readonly ISatelliteRepository _satelliteRepository;
-    private readonly ISatelliteTrackingService _trackerService;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<SatteliteTrackerWorker> _logger;
 
-    public SatteliteTrackerWorker(ISatelliteTrackingService trackerService, ISatelliteRepository satelliteRepository)
+    
+    public SatteliteTrackerWorker(IServiceProvider serviceProvider, ILogger<SatteliteTrackerWorker> logger)
     {
-        _satelliteRepository = satelliteRepository;
-        _trackerService = trackerService;
+        _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Woker стартовал...");
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                var currentPosition = await _trackerService.TrackSatelliteAsync(stoppingToken);
-                await _satelliteRepository.SavePositionAsync(currentPosition, stoppingToken);
-            }
-            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
-            {
-                break;
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    
+                    var trackingService = scope.ServiceProvider.GetRequiredService<ISatelliteTrackingService>();
+                    var repository = scope.ServiceProvider.GetRequiredService<ISatelliteRepository>();
+
+                    _logger.LogInformation("Запрашиваем координаты спутника...");
+                    var position = await trackingService.TrackSatelliteAsync(stoppingToken);
+
+                    _logger.LogInformation("Сохраняем позицию в базу данных...");
+                    await repository.SavePositionAsync(position, stoppingToken);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, "Ошибка во время выполнения итерации воркера.");
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            
+            await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
         }
     }
 }
