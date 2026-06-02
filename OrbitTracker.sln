@@ -6,12 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitTracker.Core", "src\Or
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitTracker.Infrastructure", "src\OrbitTracker.Infrastructure\OrbitTracker.Infrastructure.csproj", "{D2E3F4A5-6B7C-48D9-0A1B-C2D3E4F56789}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitTracker.Building Blocks", "src\OrbitTracker.Building Blocks\OrbitTracker.Building Blocks.csproj", "{63D428EB-D42F-412F-966F-9E676E3D3004}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5950F1AC-4987-40D9-A5F0-C8258520DDB1}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrbitTracker.Building Blocks", "OrbitTracker.Building Blocks\OrbitTracker.Building Blocks.csproj", "{63D428EB-D42F-412F-966F-9E676E3D3004}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
