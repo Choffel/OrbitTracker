@@ -16,6 +16,17 @@
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: orbit_tracker_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   orbittracker:
     image: orbittracker
     build:
@@ -27,9 +38,13 @@
       - "8081:8081"
     environment:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=orbit_tracker;Username=postgres;Password=postgres"
+      Redis__Host: "redis"
+      Redis__Port: "6379"
       ASPNETCORE_ENVIRONMENT: Production
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
 volumes:

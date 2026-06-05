@@ -28,8 +28,11 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<OrbitTrackerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider => ConnectionMultiplexer.Connect("localhost"));
+var redisConfig = builder.Configuration.GetSection("Redis");
+var redisHost = redisConfig["Host"];
+var redisPort = redisConfig.GetValue<int>("Port");
+builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider => 
+    ConnectionMultiplexer.Connect($"{redisHost}:{redisPort}"));
 
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<ISatelliteCacheService, RedisSateliteCacheService>();

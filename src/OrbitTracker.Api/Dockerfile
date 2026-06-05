@@ -10,6 +10,7 @@ WORKDIR /src
 COPY ["src/OrbitTracker.Api/OrbitTracker.Api.csproj", "src/OrbitTracker.Api/"]
 COPY ["src/OrbitTracker.Core/OrbitTracker.Core.csproj", "src/OrbitTracker.Core/"]
 COPY ["src/OrbitTracker.Infrastructure/OrbitTracker.Infrastructure.csproj", "src/OrbitTracker.Infrastructure/"]
+COPY ["src/OrbitTracker.Building Blocks/OrbitTracker.Building Blocks.csproj", "src/OrbitTracker.Building Blocks/"]
 RUN dotnet restore "src/OrbitTracker.Api/OrbitTracker.Api.csproj"
 COPY . .
 WORKDIR "/src/src/OrbitTracker.Api"
