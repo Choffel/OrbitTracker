@@ -26,7 +26,6 @@ public class SatelliteTrackerService : ISatelliteTrackingService
     
         return new SatellitePosition
         {
-            Id = Guid.NewGuid(),
             Latitude = response.Latitude,   
             Longitude = response.Longitude,
             TimeStamp = DateTimeOffset.FromUnixTimeSeconds(response.Timestamp).UtcDateTime

@@ -27,15 +27,20 @@ public class SatteliteTrackerWorker : Microsoft.Extensions.Hosting.BackgroundSer
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    
                     var trackingService = scope.ServiceProvider.GetRequiredService<ISatelliteTrackingService>();
                     var repository = scope.ServiceProvider.GetRequiredService<ISatelliteRepository>();
+                    
+                    
+                    var cacheService = scope.ServiceProvider.GetRequiredService<ISatelliteCacheService>();
 
                     _logger.LogInformation("Запрашиваем координаты спутника...");
                     var position = await trackingService.TrackSatelliteAsync(stoppingToken);
 
                     _logger.LogInformation("Сохраняем позицию в базу данных...");
                     await repository.SavePositionAsync(position, stoppingToken);
+                    
+                    _logger.LogInformation("Обновляем актуальную позицию в кэше Redis...");
+                    await cacheService.CachePositionAsync(position, stoppingToken);
                 }
             }
             catch (Exception ex)
