@@ -15,14 +15,13 @@ public class CacheService : ICacheService
         _database = connectionMultiplexer.GetDatabase();
     }
     
-    //fix 
     public async Task SetAsync<T>(string key, T value, TimeSpan? expiry = null, CancellationToken cancellationToken = default)
     {
         string fullKey = CacheKeyPrefix + key;
         
         string jsonStr = JsonSerializer.Serialize(value);
         
-        TimeSpan actualExpiry = expiry ?? TimeSpan.FromMinutes(5);
+        TimeSpan actualExpiry = expiry.HasValue ? expiry.Value : TimeSpan.FromMinutes(5);
         
         await _database.StringSetAsync(fullKey, jsonStr, actualExpiry);
     }
